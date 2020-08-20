@@ -24,31 +24,17 @@ const styles = (theme) => (
 
 class App extends Component {
   state={
-    customers : [{
-      id: 1,
-      image : 'https://placeimg.com/64/64/any',
-      name: '홍길동',
-      age : 25,
-      gender :'남자',
-      job : '대학생',
-    },
-    {
-      id: 2,
-      image : 'https://placeimg.com/64/64/any',
-      name: 'sunjo',
-      age : 25,
-      gender :'남자',
-      job : '가영이남편',
-    },
-    {
-      id: 3,
-      image : 'https://placeimg.com/64/64/any',
-      name: 'gayoung',
-      age : 25,
-      gender :'여자',
-      job : '교수',
-    },
-  ]
+    customers: ""
+  }
+  componentDidMount(){
+    this.callApi()
+      .then(res => this.setState({customers: res}))
+      .catch(err => console.log(err));
+  }
+  callApi = async () => {
+    const response = await fetch('/api/customers');
+    const body = await response.json();
+    return body;
   }
   
 
@@ -67,12 +53,12 @@ class App extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-              {this.state.customers.map(  (customers) => {
+              {this.state.customers ? this.state.customers.map(  (customers) => {
               return (
                 <Customer key={customers.id} id={customers.id} image={customers.image} name={customers.name} age={customers.age} gender = {customers.gender} 
                 job = {customers.job} />
               )
-            })}
+            }): ""}
           </TableBody>
         </Table>
       </Paper>
